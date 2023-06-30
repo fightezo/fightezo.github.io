@@ -52,7 +52,7 @@
             <ul>
               <li><a href="#exp">Experiences</a></li>
               <li><a href="#skill">Skills</a></li>
-              <li><a href="#ongoing">Projects</a></li>
+              <li><a href="#professional-works">Works</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
           </div>
@@ -82,7 +82,7 @@
                 <ul class="menu menu-desktop" style="margin-top:10px;">
                   <li><a href="#exp">Experiences</a></li>
                   <li><a href="#skill">Skills</a></li>
-                  <li><a href="#ongoing">Projects</a></li>
+                  <li><a href="#professional-works">Works</a></li>
                   <li><a href="#contact">Contact</a></li>
                 </ul>
               </div>
@@ -186,7 +186,8 @@
           <hr>
           </div>
         </section>
-    <div id="includeHtmlprojects"></div>
+    <div id="includeHtmlProfessionalprojects"></div>
+    <div id="includeHtmlPersonalWorks"></div>
 
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
@@ -197,9 +198,12 @@
 
    <script>
       $(function() {
-         $("#includeHtmlprojects").load("projects.html");
+         $("#includeHtmlProfessionalprojects").load("professionalProjects.html");
       });
    </script>
-
+   <script>
+      $(function() {
+         $("#includeHtmlPersonalWorks").load("personalWorks.html");
+      });
   </body>
 </html>
