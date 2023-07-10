@@ -395,3 +395,21 @@ MEDIA QUERIES
 		margin: 0;
 	}
 }
+
+/* ******************************
+ABOUT
+******************************* */
+.privacyPolicy{
+	background-color: #FFFFFF;
+	height: 100%;
+	padding: 80px 0px;
+/*	background-image: url("../img/broken_noise.png");*/
+	/*http://subtlepatterns.com/*/
+}
+
+.privacyPolicy h1, 
+.privacyPolicy h3,
+.privacyPolicy p{
+	color: rgba(255,255,255,0.8);
+	width: 70%;
+}
