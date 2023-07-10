@@ -276,7 +276,7 @@ SKILL
 /* ******************************
 PROFESSIONAL PROJECTS
 ******************************* */
-.ongoing{
+.professional-projects{
 	background-color: #626262;
 	height: 100%;
 	padding: 30px 0px;
@@ -284,9 +284,9 @@ PROFESSIONAL PROJECTS
 	/*http://subtlepatterns.com/*/
 }
 
-.ongoing h1,
-.ongoing h3,
-.ongoing p{
+.professional-projects h1,
+.professional-projects h3,
+.professional-projects p{
 	color: rgba(0,0,0,0.8);
 	margin: 0px;
 	width: 100%;
@@ -295,7 +295,7 @@ PROFESSIONAL PROJECTS
 /* ******************************
 ONGOING PROJECTS
 ******************************* */
-.ongoing{
+.personal-projects{
 	background-color: #AAA;
 	height: 100%;
 	padding: 30px 0px;
@@ -303,9 +303,9 @@ ONGOING PROJECTS
 	/*http://subtlepatterns.com/*/
 }
 
-.ongoing h1,
-.ongoing h3,
-.ongoing p{
+.personal-projects h1,
+.personal-projects h3,
+.personal-projects p{
 	color: rgba(0,0,0,0.8);
 	margin: 0px;
 	width: 100%;
