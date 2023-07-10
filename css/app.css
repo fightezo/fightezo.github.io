@@ -237,7 +237,7 @@ EXP
 	width: 100%;
 }
 
-.ubc{
+/*.ubc{
 	width:30%; 
 }
 .kinetix{
@@ -247,7 +247,7 @@ EXP
 
 .ggj{
 	width:70%;
-}
+}*/
 /* ******************************
 SKILL
 ******************************* */
@@ -270,6 +270,25 @@ SKILL
 
 .skill p{
 	color: rgba(255,255,255,1);
+	width: 100%;
+}
+
+/* ******************************
+PROFESSIONAL PROJECTS
+******************************* */
+.ongoing{
+	background-color: #626262;
+	height: 100%;
+	padding: 30px 0px;
+	text-align: center;
+	/*http://subtlepatterns.com/*/
+}
+
+.ongoing h1,
+.ongoing h3,
+.ongoing p{
+	color: rgba(0,0,0,0.8);
+	margin: 0px;
 	width: 100%;
 }
 
