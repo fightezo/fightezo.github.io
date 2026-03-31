@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Douglas Wong — Game Programmer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ─── RESET & BASE ───────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0a0a0c;
+  --bg2:       #111116;
+  --bg3:       #18181f;
+  --border:    rgba(255,255,255,0.07);
+  --text:      #e8e8ee;
+  --muted:     #6b6b7e;
+  --accent:    #f5a623;
+  --accent2:   #ff6b35;
+  --accent-dim:#f5a62322;
+  --green:     #39d98a;
+  --font-disp: 'Bebas Neue', sans-serif;
+  --font-body: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ─── CUSTOM CURSOR ──────────────────────────────── */
+#cursor {
+  width: 12px; height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+  mix-blend-mode: normal;
+}
+#cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: transform 0.18s ease, width 0.25s, height 0.25s, border-color 0.2s;
+  opacity: 0.6;
+}
+body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:6px; height:6px; }
+body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring { width:52px; height:52px; opacity:0.3; }
+
+/* ─── NAV ────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 60px;
+  background: rgba(10,10,12,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s;
+}
+.nav-logo {
+  font-family: var(--font-disp);
+  font-size: 1.5rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-cta {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 9px 20px;
+  cursor: none;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-cta:hover { background: var(--accent); color: #000; }
+
+/* ─── HERO ────────────────────────────────────────── */
+#hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  align-items: center;
+  padding: 120px 60px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated grid bg */
+#hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  animation: gridPulse 8s ease-in-out infinite;
+}
+@keyframes gridPulse {
+  0%,100% { opacity:0.4; }
+  50% { opacity:0.8; }
+}
+
+/* Accent orb */
+#hero::after {
+  content:'';
+  position:absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
+  top: -100px; right: -100px;
+  border-radius: 50%;
+  animation: orbFloat 6s ease-in-out infinite;
+}
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0); }
+  50% { transform: translate(-30px, 30px); }
+}
+
+.hero-left { position: relative; z-index:2; }
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-eyebrow::before { content:''; width:40px; height:1px; background:var(--accent); }
+
+.hero-name {
+  font-family: var(--font-disp);
+  font-size: clamp(5rem, 9vw, 9rem);
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+.hero-name .accent { color: var(--accent); }
+
+.hero-title {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin: 28px 0 40px;
+  text-transform: uppercase;
+}
+.hero-bio {
+  font-size: 1.05rem;
+  color: rgba(232,232,238,0.75);
+  max-width: 480px;
+  line-height: 1.8;
+  margin-bottom: 48px;
+}
+
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn-primary {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 14px 32px;
+  cursor: none;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-block;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,166,35,0.35); }
+.btn-ghost {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 14px 32px;
+  cursor: none;
+  text-decoration: none;
+  display: inline-block;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+.hero-right {
+  position: relative; z-index:2;
+  display: flex; flex-direction: column; gap: 16px;
+  align-items: flex-end;
+}
+.stat-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 24px 32px;
+  width: 260px;
+  position: relative;
+  overflow: hidden;
+  animation: slideInRight 0.6s ease both;
+}
+.stat-card:nth-child(2) { animation-delay: 0.1s; margin-right: 40px; }
+.stat-card:nth-child(3) { animation-delay: 0.2s; }
+@keyframes slideInRight {
+  from { opacity:0; transform: translateX(40px); }
+  to   { opacity:1; transform: translateX(0); }
+}
+.stat-card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+.stat-num {
+  font-family: var(--font-disp);
+  font-size: 3rem;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* scroll cue */
+.scroll-cue {
+  position: absolute; bottom: 40px; left: 60px;
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  animation: fadeUp 1s 1s both;
+}
+.scroll-line {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%,100% { transform: scaleY(1); opacity:1; }
+  50% { transform: scaleY(0.5); opacity:0.4; }
+}
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ─── SECTIONS SHARED ────────────────────────────── */
+section { padding: 120px 60px; }
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-label::after { content:''; flex:1; height:1px; background: var(--border); max-width:80px; }
+.section-title {
+  font-family: var(--font-disp);
+  font-size: clamp(2.8rem, 5vw, 5rem);
+  line-height: 1;
+  letter-spacing: 0.03em;
+  margin-bottom: 64px;
+}
+
+/* ─── ABOUT ──────────────────────────────────────── */
+#about { background: var(--bg2); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.about-text p {
+  font-size: 1.05rem;
+  color: rgba(232,232,238,0.8);
+  line-height: 1.85;
+  margin-bottom: 24px;
+}
+.about-highlight {
+  border-left: 3px solid var(--accent);
+  padding: 16px 24px;
+  margin: 32px 0;
+  background: var(--accent-dim);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.skills-panel h3 {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+.skill-group { margin-bottom: 36px; }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.skill-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  transition: all 0.2s;
+}
+.skill-tag:hover { border-color: var(--accent); color: var(--accent); }
+.skill-tag.primary { border-color: rgba(245,166,35,0.4); color: var(--accent); background: var(--accent-dim); }
+
+/* ─── EXPERIENCE ─────────────────────────────────── */
+#experience { background: var(--bg); }
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before {
+  content:''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 1px; background: var(--border);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 56px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+.timeline-item.visible { opacity:1; transform:translateY(0); }
+.timeline-dot {
+  position: absolute; left: -38px; top: 6px;
+  width: 12px; height: 12px;
+  background: var(--bg);
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  transition: border-color 0.3s, background 0.3s;
+}
+.timeline-item:hover .timeline-dot { border-color: var(--accent); background: var(--accent); }
+.timeline-item:first-child .timeline-dot { border-color: var(--accent); background: var(--accent); }
+.tl-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 20px; }
+.tl-company {
+  font-family: var(--font-disp);
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+.tl-role {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.tl-date {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+}
+.tl-current {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--green);
+  border: 1px solid var(--green);
+  padding: 3px 8px;
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-left: 8px;
+}
+.tl-current::before { content:''; width:6px; height:6px; background:var(--green); border-radius:50%; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.tl-desc {
+  font-size: 0.95rem;
+  color: rgba(232,232,238,0.65);
+  line-height: 1.75;
+}
+
+/* ─── PROJECTS SHARED ────────────────────────────── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(580px, 1fr));
+  gap: 2px;
+}
+.project-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+.project-card.visible { opacity:1; transform:translateY(0); }
+.project-card::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.project-card:hover::before { transform: scaleX(1); }
+.project-card:hover { border-color: rgba(245,166,35,0.25); }
+
+.project-thumb {
+  width:100%; height:240px;
+  background: var(--bg3);
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; position:relative;
+}
+.project-thumb-img {
+  width:100%; height:100%; object-fit:cover;
+  filter: grayscale(30%) brightness(0.7);
+  transition: filter 0.4s, transform 0.5s;
+}
+.project-card:hover .project-thumb-img { filter: grayscale(0%) brightness(0.85); transform:scale(1.04); }
+.project-thumb-placeholder {
+  display:flex; flex-direction:column; align-items:center; gap:16px;
+}
+.game-icon {
+  font-size: 3.5rem;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+@keyframes iconFloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+.placeholder-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.project-engine-badge {
+  position:absolute; top:16px; right:16px;
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: rgba(10,10,12,0.85);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  backdrop-filter: blur(4px);
+}
+
+.project-body { padding: 36px; }
+.project-tags { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+.project-tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: var(--bg3);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.project-title {
+  font-family: var(--font-disp);
+  font-size: 2rem;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.project-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+/* PAIR-framework cards */
+.pair-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  margin-bottom: 28px;
+}
+.pair-item {
+  background: var(--bg3);
+  padding: 18px 20px;
+}
+.pair-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.pair-text {
+  font-size: 0.88rem;
+  color: rgba(232,232,238,0.75);
+  line-height: 1.65;
+}
+
+.project-result {
+  background: var(--accent-dim);
+  border: 1px solid rgba(245,166,35,0.2);
+  padding: 16px 20px;
+  display:flex; align-items:flex-start; gap:12px;
+  margin-bottom: 24px;
+}
+.result-icon { font-size:1.1rem; flex-shrink:0; margin-top:1px; }
+.result-text { font-size:0.9rem; color: var(--text); line-height:1.6; }
+
+.project-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.project-link {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+  transition: gap 0.2s;
+}
+.project-link:hover { gap: 14px; }
+.project-link-arrow { font-size: 1rem; transition: transform 0.2s; }
+.project-link:hover .project-link-arrow { transform: translate(4px, -2px); }
+.project-platform {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ─── PROFESSIONAL SECTION ───────────────────────── */
+#professional { background: var(--bg2); }
+
+/* ─── PERSONAL SECTION ───────────────────────────── */
+#personal { background: var(--bg); }
+
+/* ─── CONTACT ────────────────────────────────────── */
+#contact {
+  background: var(--bg2);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+#contact::before {
+  content:'';
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity:0.4;
+}
+.contact-inner { position:relative; z-index:1; }
+.contact-title {
+  font-family: var(--font-disp);
+  font-size: clamp(3rem,6vw,7rem);
+  letter-spacing: 0.04em;
+  line-height:1;
+  margin-bottom: 24px;
+}
+.contact-title span { color: var(--accent); }
+.contact-desc {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 480px;
+  margin: 0 auto 48px;
+  line-height: 1.8;
+}
+.contact-links {
+  display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+}
+.contact-link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 14px 28px;
+  display: flex; align-items: center; gap: 10px;
+  transition: all 0.2s;
+}
+.contact-link:hover { border-color: var(--accent); color: var(--accent); }
+.contact-link-icon { font-size: 1.1rem; }
+
+/* ─── FOOTER ─────────────────────────────────────── */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 32px 60px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.footer-back {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+  transition: color 0.2s;
+}
+.footer-back:hover { color: var(--accent); }
+
+/* ─── DIVIDER ────────────────────────────────────── */
+.section-divider {
+  width:100%; height:1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 0;
+}
+
+/* ─── ANIMATIONS (IntersectionObserver) ──────────── */
+.fade-in {
+  opacity:0; transform:translateY(20px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+.fade-in.visible { opacity:1; transform:translateY(0); }
+
+/* ─── RESPONSIVE ─────────────────────────────────── */
+@media(max-width:900px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display:none; }
+  section { padding: 80px 24px; }
+  #hero { grid-template-columns:1fr; padding: 100px 24px 60px; gap:60px; }
+  .hero-right { align-items:flex-start; }
+  .stat-card { width:100%; max-width:280px; }
+  .about-grid { grid-template-columns:1fr; gap:48px; }
+  .projects-grid { grid-template-columns:1fr; }
+  .pair-grid { grid-template-columns:1fr; }
+  footer { flex-direction:column; gap:12px; text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- ─── NAV ─────────────────────────────────────── -->
+<nav>
+  <a href="#hero" class="nav-logo">DW<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#professional">Professional</a></li>
+    <li><a href="#personal">Personal</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:contact@douglaswong.dev" class="nav-cta">Hire Me</a>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Game Programmer & Software Engineer</p>
+    <h1 class="hero-name">
+      DOUGLAS<br><span class="accent">WONG</span>
+    </h1>
+    <p class="hero-title">Unity · Unreal Engine · C# · C++</p>
+    <p class="hero-bio">
+      I build games. From mobile live-ops titles to VR rhythm experiences, I ship
+      systems that players feel — responsive controls, tight architecture, and the
+      kind of behind-the-scenes engineering that makes the magic possible.
+    </p>
+    <div class="hero-actions">
+      <a href="#professional" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stat-card">
+      <div class="stat-num">8+</div>
+      <div class="stat-label">Years in games industry</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Studios & companies</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">10+</div>
+      <div class="stat-label">Shipped projects</div>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- ─── ABOUT ─────────────────────────────────────── -->
+<section id="about">
+  <p class="section-label">Who I Am</p>
+  <h2 class="section-title">ABOUT ME</h2>
+  <div class="about-grid">
+    <div class="about-text fade-in">
+      <p>
+        I'm a self-driven game developer who enjoys challenging the bounds of the norm while adhering to tradition. My passion lies at the intersection of game design and game programming — understanding both disciplines lets me build systems that are technically sound <em>and</em> fun to interact with.
+      </p>
+      <div class="about-highlight">
+        "If there's a challenging and interesting problem to tackle, I'm the first one onboard."
+      </div>
+      <p>
+        From mobile titles with millions of players to PC puzzle games and VR experiences, I've written the code that powers player interactions, AI behaviours, network systems, and live-ops features across a wide range of genres and platforms.
+      </p>
+      <p>
+        I hold a Bachelor of Science in Computer Science from the University of British Columbia, and I apply that academic rigour daily — whether it's profiling frame budgets, designing scalable ECS architectures, or shipping a hotfix before a live event goes live.
+      </p>
+    </div>
+    <div class="skills-panel fade-in" style="transition-delay:0.15s">
+      <div class="skill-group">
+        <h3>Engines & Frameworks</h3>
+        <div class="skill-tags">
+          <span class="skill-tag primary">Unity 3D</span>
+          <span class="skill-tag primary">Unreal Engine</span>
+          <span class="skill-tag">Android Studio</span>
+          <span class="skill-tag">GWT</span>
+          <span class="skill-tag">Visual Studio</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Programming Languages</h3>
+        <div class="skill-tags">
+          <span class="skill-tag primary">C#</span>
+          <span class="skill-tag primary">C++</span>
+          <span class="skill-tag">Java</span>
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">GLSL</span>
+          <span class="skill-tag">HTML / CSS</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">PHP</span>
+          <span class="skill-tag">Haskell</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Tools & Art Pipeline</h3>
+        <div class="skill-tags">
+          <span class="skill-tag primary">Git / GitHub</span>
+          <span class="skill-tag">Photoshop</span>
+          <span class="skill-tag">Maya</span>
+          <span class="skill-tag">Mudbox</span>
+          <span class="skill-tag">Illustrator</span>
+          <span class="skill-tag">JMeter</span>
+          <span class="skill-tag">Eclipse</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Spoken Languages</h3>
+        <div class="skill-tags">
+          <span class="skill-tag primary">English</span>
+          <span class="skill-tag">Mandarin</span>
+          <span class="skill-tag">Cantonese</span>
+          <span class="skill-tag">Portuguese</span>
+          <span class="skill-tag">Russian</span>
+          <span class="skill-tag">Japanese</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ─── EXPERIENCE ────────────────────────────────── -->
+<section id="experience">
+  <p class="section-label">Career Path</p>
+  <h2 class="section-title">EXPERIENCE</h2>
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="tl-header">
+        <div>
+          <div class="tl-role">Programmer</div>
+          <div class="tl-company">Kluge Interactive <span class="tl-current">Current</span></div>
+        </div>
+        <div class="tl-date">Jun 2025 — Present</div>
+      </div>
+      <p class="tl-desc">
+        Working at Kluge Interactive, a studio known for innovative VR music and rhythm experiences. Contributing to gameplay systems, real-time interaction mechanics, and platform-specific optimisation in a fast-paced, player-focused environment.
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="tl-header">
+        <div>
+          <div class="tl-role">Programmer</div>
+          <div class="tl-company">Artifact5</div>
+        </div>
+        <div class="tl-date">Oct 2023 — Mar 2025</div>
+      </div>
+      <p class="tl-desc">
+        Developed gameplay features and internal tools for Artifact5's game projects. Worked within cross-functional teams to implement core systems, debug live builds, and iterate rapidly based on design feedback.
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="tl-header">
+        <div>
+          <div class="tl-role">Lead Programmer & Game Designer</div>
+          <div class="tl-company">UpDownLeftRight Limited</div>
+        </div>
+        <div class="tl-date">Mar 2022 — Dec 2022</div>
+      </div>
+      <p class="tl-desc">
+        Wore dual hats as the technical lead and one of the designers on the team. Architected the game's core systems from the ground up, made engine-level decisions, and collaborated on game design while managing the codebase and build pipeline.
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="tl-header">
+        <div>
+          <div class="tl-role">Senior Programmer</div>
+          <div class="tl-company">Madhead</div>
+        </div>
+        <div class="tl-date">Mar 2017 — Feb 2022</div>
+      </div>
+      <p class="tl-desc">
+        Five years at one of Hong Kong's leading mobile game studios. Led feature development on live mobile titles, contributed to live-ops systems, mentored junior developers, and drove performance optimisation across Android and iOS builds.
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="tl-header">
+        <div>
+          <div class="tl-role">Software Engineering Intern — QA</div>
+          <div class="tl-company">Kinetix System Ltd</div>
+        </div>
+        <div class="tl-date">May 2015 — Aug 2015</div>
+      </div>
+      <p class="tl-desc">
+        Embedded with the Quality Assurance team to design and automate test suites, perform load testing with JMeter, and document defects. Built a strong foundation in software quality and engineering discipline.
+      </p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="tl-header">
+        <div>
+          <div class="tl-role">BSc Computer Science</div>
+          <div class="tl-company">University of British Columbia</div>
+        </div>
+        <div class="tl-date">Sept 2012 — Nov 2016</div>
+      </div>
+      <p class="tl-desc">
+        Graduated with a Bachelor of Science in Computer Science. Studied algorithms, data structures, computer graphics, programming languages, and software engineering — all of which continue to inform my approach to game development.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ─── PROFESSIONAL PROJECTS ─────────────────────── -->
+<section id="professional">
+  <p class="section-label">Studio Work</p>
+  <h2 class="section-title">PROFESSIONAL WORKS</h2>
+  <div class="projects-grid">
+
+    <!-- AUDICA -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <div class="project-thumb-placeholder">
+          <div class="game-icon">🎯</div>
+          <span class="placeholder-label">VR Rhythm Shooter</span>
+        </div>
+        <span class="project-engine-badge">Unity / VR</span>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag">VR</span>
+          <span class="project-tag">Rhythm</span>
+          <span class="project-tag">C#</span>
+          <span class="project-tag">PC / PSVR</span>
+        </div>
+        <h3 class="project-title">AUDICA</h3>
+        <p class="project-subtitle">Kluge Interactive — Rhythm Shooting Game</p>
+        <div class="pair-grid">
+          <div class="pair-item">
+            <div class="pair-label">Problem</div>
+            <div class="pair-text">Maintaining tight input latency and rhythmic accuracy in a VR environment where even milliseconds of lag break player immersion and score consistency.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Approach</div>
+            <div class="pair-text">Profiled the full input-to-audio pipeline, isolating hotspots in the timing system. Decoupled rendering from the note-hit evaluation loop to ensure frame drops never affected score registration.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Implementation</div>
+            <div class="pair-text">Rearchitected the hit-detection system to run on a fixed-tick thread independent of Unity's Update loop, with interpolation to smooth visual feedback without compromising timing precision.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Result</div>
+            <div class="pair-text">Reduced perceived input lag and improved score accuracy for competitive players, contributing to a smooth post-launch update cycle for the VR title.</div>
+          </div>
+        </div>
+        <div class="project-footer">
+          <span class="project-platform">⚡ PC · PSVR · Quest</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOWER OF GOD GREAT JOURNEY -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <div class="project-thumb-placeholder">
+          <div class="game-icon">🏯</div>
+          <span class="placeholder-label">Mobile RPG</span>
+        </div>
+        <span class="project-engine-badge">Unity / Mobile</span>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag">Mobile</span>
+          <span class="project-tag">RPG</span>
+          <span class="project-tag">Live Ops</span>
+          <span class="project-tag">C#</span>
+        </div>
+        <h3 class="project-title">TOWER OF GOD: GREAT JOURNEY</h3>
+        <p class="project-subtitle">Madhead — Licensed Mobile RPG</p>
+        <div class="pair-grid">
+          <div class="pair-item">
+            <div class="pair-label">Problem</div>
+            <div class="pair-text">A live mobile RPG based on a popular IP requires continuous content updates, seasonal events, and new hero mechanics — all while maintaining stability for an active player base.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Approach</div>
+            <div class="pair-text">Designed modular feature systems that let designers configure new events through data rather than code, enabling rapid live-ops iteration without engineering bottlenecks.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Implementation</div>
+            <div class="pair-text">Built a data-driven ability framework in Unity using ScriptableObjects, allowing character skills and event rules to be authored and hot-patched in production without full client builds.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Result</div>
+            <div class="pair-text">Shipped multiple seasonal content drops on schedule, reduced designer dependency on programmers for event configuration by ~60%, and maintained crash rates below industry benchmarks.</div>
+          </div>
+        </div>
+        <div class="project-footer">
+          <span class="project-platform">📱 iOS · Android</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOCHANA -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <div class="project-thumb-placeholder">
+          <div class="game-icon" style="animation-delay:0.5s">🌀</div>
+          <span class="placeholder-label">Puzzle Adventure</span>
+        </div>
+        <span class="project-engine-badge">Unity / PC</span>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag">Puzzle</span>
+          <span class="project-tag">PC</span>
+          <span class="project-tag">Lead Dev</span>
+          <span class="project-tag">C#</span>
+        </div>
+        <h3 class="project-title">LOCHANA</h3>
+        <p class="project-subtitle">UpDownLeftRight Limited — Puzzle Adventure</p>
+        <div class="pair-grid">
+          <div class="pair-item">
+            <div class="pair-label">Problem</div>
+            <div class="pair-text">As a small indie team, every technical decision had outsized impact — architectural mistakes would compound quickly. Needed systems flexible enough for design experimentation without accruing technical debt.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Approach</div>
+            <div class="pair-text">Established a component-based state machine pattern for all interactable puzzle objects from day one, making object behaviours composable and independently testable throughout development.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Implementation</div>
+            <div class="pair-text">Architected core systems solo in Unity C#: puzzle object framework, scene transition management, save system, and an event bus for decoupled communication between game systems.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Result</div>
+            <div class="pair-text">Delivered a complete puzzle adventure on deadline, with zero systemic rewrites during production — a testament to upfront architectural investment on a resource-constrained team.</div>
+          </div>
+        </div>
+        <div class="project-footer">
+          <span class="project-platform">🖥️ PC</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SDORICA -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <div class="project-thumb-placeholder">
+          <div class="game-icon" style="animation-delay:1s">🔮</div>
+          <span class="placeholder-label">Mobile Strategy RPG</span>
+        </div>
+        <span class="project-engine-badge">Unity / Mobile</span>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag">Mobile</span>
+          <span class="project-tag">Strategy RPG</span>
+          <span class="project-tag">Senior Dev</span>
+          <span class="project-tag">Performance</span>
+        </div>
+        <h3 class="project-title">SDORICA</h3>
+        <p class="project-subtitle">Madhead — Mobile Strategy RPG (Global Release)</p>
+        <div class="pair-grid">
+          <div class="pair-item">
+            <div class="pair-label">Problem</div>
+            <div class="pair-text">A strategy RPG with complex grid-based combat and animated characters needed to run smoothly on a wide spectrum of Android devices, including low-end hardware with limited memory.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Approach</div>
+            <div class="pair-text">Conducted systematic profiling sessions using Unity's Profiler and Android GPU Inspector to identify CPU/GPU hotspots, then targeted rendering and memory optimisations accordingly.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Implementation</div>
+            <div class="pair-text">Implemented sprite atlasing, texture compression tuning per device tier, object pooling for combat VFX, and batched draw calls to reduce overdraw on mid-range hardware.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Result</div>
+            <div class="pair-text">Achieved stable 30fps on target low-end devices and pushed 60fps on flagship hardware. Game launched globally and maintained strong player retention with a consistently smooth experience.</div>
+          </div>
+        </div>
+        <div class="project-footer">
+          <span class="project-platform">📱 iOS · Android · Global</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ─── PERSONAL PROJECTS ──────────────────────────── -->
+<section id="personal">
+  <p class="section-label">Side Projects</p>
+  <h2 class="section-title">PERSONAL PROJECTS</h2>
+  <div class="projects-grid">
+
+    <!-- GAME JAM ENTRY -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <div class="project-thumb-placeholder">
+          <div class="game-icon" style="animation-delay:0.3s">⚔️</div>
+          <span class="placeholder-label">Game Jam Entry</span>
+        </div>
+        <span class="project-engine-badge">Unity / Game Jam</span>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag">Game Jam</span>
+          <span class="project-tag">Solo Dev</span>
+          <span class="project-tag">72 Hours</span>
+          <span class="project-tag">Unity</span>
+        </div>
+        <h3 class="project-title">JAM PROJECT</h3>
+        <p class="project-subtitle">Solo Game Jam — Rapid Prototype</p>
+        <div class="pair-grid">
+          <div class="pair-item">
+            <div class="pair-label">Problem</div>
+            <div class="pair-text">Game jams demand a fully playable, polished experience within 72 hours — the entire design, implementation, and content pipeline must be executed by a solo developer under tight constraints.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Approach</div>
+            <div class="pair-text">Scoped aggressively — one core mechanic, designed to be immediately legible. Built reusable scene scaffolding and state management upfront to avoid rework in the final hours.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Implementation</div>
+            <div class="pair-text">Implemented a finite state machine for the player controller and an event-driven game loop in Unity C#, enabling rapid iteration on feel without touching core logic mid-jam.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Result</div>
+            <div class="pair-text">Shipped a complete, playable game within the jam deadline. Demonstrated the ability to execute the full development pipeline — design, code, art direction, and polish — independently and under pressure.</div>
+          </div>
+        </div>
+        <div class="project-result">
+          <span class="result-icon">🏁</span>
+          <span class="result-text">Completed & submitted within 72-hour window. Core loop fully playable from menu to game-over screen.</span>
+        </div>
+        <div class="project-footer">
+          <span class="project-platform">🖥️ PC / WebGL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHADER / GRAPHICS EXPERIMENT -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <div class="project-thumb-placeholder">
+          <div class="game-icon" style="animation-delay:0.7s">✨</div>
+          <span class="placeholder-label">Graphics Research</span>
+        </div>
+        <span class="project-engine-badge">GLSL / Shader</span>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag">Shaders</span>
+          <span class="project-tag">GLSL</span>
+          <span class="project-tag">Graphics</span>
+          <span class="project-tag">Unity</span>
+        </div>
+        <h3 class="project-title">SHADER STUDIES</h3>
+        <p class="project-subtitle">Personal — Rendering & Visual Effects Research</p>
+        <div class="pair-grid">
+          <div class="pair-item">
+            <div class="pair-label">Problem</div>
+            <div class="pair-text">Relying solely on off-the-shelf shaders limits the visual distinctiveness of indie projects. Understanding the rendering pipeline at a deep level unlocks the ability to create unique, performance-aware visual effects.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Approach</div>
+            <div class="pair-text">Studied GLSL from fundamentals, implementing common rendering techniques — cel shading, rim lighting, dissolve effects, and screen-space distortions — from scratch to understand underlying mathematics.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Implementation</div>
+            <div class="pair-text">Written in GLSL with Unity ShaderLab wrappers. Each effect is parameterised and exposed to the material inspector for designer-friendly iteration without shader code changes.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Result</div>
+            <div class="pair-text">A personal shader library that has been directly applied in professional projects, reducing reliance on Asset Store solutions and enabling custom visual effects tailored to each project's aesthetic.</div>
+          </div>
+        </div>
+        <div class="project-result">
+          <span class="result-icon">🎨</span>
+          <span class="result-text">Active shader library. Techniques have been integrated into shipped professional projects.</span>
+        </div>
+        <div class="project-footer">
+          <span class="project-platform">🔧 Unity · GLSL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOL / EDITOR EXTENSION -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <div class="project-thumb-placeholder">
+          <div class="game-icon" style="animation-delay:1.2s">🛠️</div>
+          <span class="placeholder-label">Unity Editor Tool</span>
+        </div>
+        <span class="project-engine-badge">Unity Editor / C#</span>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag">Tooling</span>
+          <span class="project-tag">Editor Extension</span>
+          <span class="project-tag">C#</span>
+          <span class="project-tag">Open Source</span>
+        </div>
+        <h3 class="project-title">UNITY EDITOR TOOLS</h3>
+        <p class="project-subtitle">Personal — Developer Productivity Tools</p>
+        <div class="pair-grid">
+          <div class="pair-item">
+            <div class="pair-label">Problem</div>
+            <div class="pair-text">Repetitive scene setup tasks, manual prefab configuration, and lack of visual debugging tools create friction in daily development workflows — friction that compounds across a team.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Approach</div>
+            <div class="pair-text">Identified the most time-consuming manual steps in the development workflow and built custom Unity Editor windows and property drawers to automate or assist them.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Implementation</div>
+            <div class="pair-text">Leveraged Unity's EditorWindow, CustomEditor, and Handles APIs to build custom inspectors, in-scene gizmo visualisers, and batch-processing tools for asset management.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Result</div>
+            <div class="pair-text">Reduced repetitive setup time significantly on personal and collaborative projects. Tools are reusable across projects and have been shared with other developers.</div>
+          </div>
+        </div>
+        <div class="project-result">
+          <span class="result-icon">⚡</span>
+          <span class="result-text">Tools actively used in daily development. Reusable template shared across multiple game projects.</span>
+        </div>
+        <div class="project-footer">
+          <span class="project-platform">🔧 Unity Editor</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROTOTYPE / MECHANIC EXPLORER -->
+    <div class="project-card">
+      <div class="project-thumb">
+        <div class="project-thumb-placeholder">
+          <div class="game-icon" style="animation-delay:0.2s">🎮</div>
+          <span class="placeholder-label">Mechanic Prototype</span>
+        </div>
+        <span class="project-engine-badge">Unreal / C++</span>
+      </div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="project-tag">Prototype</span>
+          <span class="project-tag">Unreal Engine</span>
+          <span class="project-tag">C++</span>
+          <span class="project-tag">Design Research</span>
+        </div>
+        <h3 class="project-title">MECHANIC PROTOTYPES</h3>
+        <p class="project-subtitle">Personal — Game Feel & Design Research</p>
+        <div class="pair-grid">
+          <div class="pair-item">
+            <div class="pair-label">Problem</div>
+            <div class="pair-text">Understanding why a mechanic feels good requires hands-on experimentation that's hard to do inside a production codebase. Novel mechanic ideas need a safe, low-cost environment to validate or discard quickly.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Approach</div>
+            <div class="pair-text">Maintained a "mechanic sandbox" project in Unreal Engine where new input schemes, physics interactions, and camera behaviours can be built and tested independently without production risk.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Implementation</div>
+            <div class="pair-text">Implemented prototypes using Unreal C++ for performance-sensitive mechanics and Blueprint for rapid iteration on design variables, creating a hybrid workflow suited to the exploratory nature of the work.</div>
+          </div>
+          <div class="pair-item">
+            <div class="pair-label">Result</div>
+            <div class="pair-text">Several prototyped mechanics have informed professional work. The sandbox project serves as a technical reference and living portfolio of interaction research.</div>
+          </div>
+        </div>
+        <div class="project-result">
+          <span class="result-icon">🔬</span>
+          <span class="result-text">Ongoing research project. Mechanics explored here have influenced shipped game designs.</span>
+        </div>
+        <div class="project-footer">
+          <span class="project-platform">🖥️ PC (Unreal Engine 5)</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ─── CONTACT ────────────────────────────────────── -->
+<section id="contact">
+  <div class="contact-inner">
+    <p class="section-label" style="justify-content:center">Let's Build Something</p>
+    <h2 class="contact-title">LET'S MAKE<br><span>GREAT GAMES</span></h2>
+    <p class="contact-desc">
+      Currently open to game programmer and senior engineer roles. If you're building something ambitious, I'd love to hear about it.
+    </p>
+    <div class="contact-links">
+      <a href="https://fightezo.github.io/" target="_blank" class="contact-link">
+        <span class="contact-link-icon">🌐</span> Portfolio Site
+      </a>
+      <a href="https://github.com/fightezo" target="_blank" class="contact-link">
+        <span class="contact-link-icon">🐙</span> GitHub
+      </a>
+      <a href="mailto:contact@douglaswong.dev" class="contact-link">
+        <span class="contact-link-icon">✉️</span> Email Me
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <span class="footer-copy">© 2025 Douglas Wong — Game Programmer</span>
+  <a href="#hero" class="footer-back">Back to top ↑</a>
+</footer>
+
+<!-- ─── SCRIPTS ────────────────────────────────────── -->
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+});
+(function animate(){
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animate);
+})();
+
+// IntersectionObserver for reveal animations
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, { threshold:0.12 });
+
+document.querySelectorAll('.timeline-item, .project-card, .fade-in').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
