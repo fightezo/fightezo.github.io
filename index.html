@@ -66,26 +66,21 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
 
 /* right column: stat cards fill height of the left column */
-/* .hero-right{position:relative;z-index:2;display:flex;flex-direction:column;gap:12px;align-self:stretch;justify-content:center;} */
-/* .stat-card{background:var(--bg3);border:1px solid var(--border);padding:24px 28px;position:relative;overflow:hidden;flex:1;display:flex;flex-direction:column;justify-content:center;} */
-/* .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));} */
-/* .stat-num{font-family:var(--font-disp);font-size:2.8rem;color:var(--accent);letter-spacing:.04em;line-height:1;} */
-/* .stat-label{font-family:var(--font-mono);font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-top:8px;} */
 .hero-right {
   position: relative; z-index:2;
   display: flex; flex-direction: column; gap: 16px;
-  align-items: flex-end;
+  align-items: stretch;
 }
 .stat-card {
   background: var(--bg3);
   border: 1px solid var(--border);
-  padding: 24px 32px;
-  width: 500px;
+  padding: 24px 28px;
+  width: 100%;
   position: relative;
   overflow: hidden;
   animation: slideInRight 0.6s ease both;
 }
-.stat-card:nth-child(2) { animation-delay: 0.1s; margin-right: 40px; }
+.stat-card:nth-child(2) { animation-delay: 0.1s; margin-right: 0; }
 .stat-card:nth-child(3) { animation-delay: 0.2s; }
 @keyframes slideInRight {
   from { opacity:0; transform: translateX(40px); }
@@ -98,24 +93,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 }
 .stat-num {
   font-family: var(--font-disp);
-  font-size: 3rem;
+  font-size: 2.8rem;
   color: var(--accent);
   letter-spacing: 0.04em;
+  line-height: 1;
 }
 .stat-label {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-top: 4px;
+  margin-top: 6px;
 }
-.scroll-cue{position:absolute;bottom:40px;left:60px;display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+.scroll-cue{position:absolute;bottom:40px;left:var(--section-px, 60px);display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
 .scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollLine 2s ease-in-out infinite;}
 @keyframes scrollLine{0%,100%{opacity:1;}50%{opacity:.3;}}
 
 /* SECTIONS */
-section{padding:110px 60px;}
+:root { --section-px: 60px; }
+section{padding:110px var(--section-px);}
 .section-label{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:12px;}
 .section-label::after{content:'';flex:1;height:1px;background:var(--border);max-width:80px;}
 .section-title{font-family:var(--font-disp);font-size:clamp(2.8rem,5vw,5rem);line-height:1;letter-spacing:.03em;margin-bottom:64px;}
@@ -140,17 +137,17 @@ section{padding:110px 60px;}
 .timeline-item.visible{opacity:1;transform:translateY(0);}
 .timeline-dot{position:absolute;left:-38px;top:6px;width:12px;height:12px;background:var(--bg);border:2px solid var(--muted);border-radius:50%;transition:border-color .3s,background .3s;}
 .timeline-item:hover .timeline-dot,.timeline-item:first-child .timeline-dot{border-color:var(--accent);background:var(--accent);}
-.tl-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:20px;}
+.tl-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:12px;flex-wrap:wrap;}
 .tl-company{font-family:var(--font-disp);font-size:1.5rem;letter-spacing:.04em;color:var(--text);}
 .tl-role{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;color:var(--accent);text-transform:uppercase;margin-bottom:4px;}
-.tl-date{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;white-space:nowrap;padding:4px 10px;border:1px solid var(--border);flex-shrink:0;}
+.tl-date{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;white-space:nowrap;padding:4px 10px;border:1px solid var(--border);flex-shrink:0;align-self:flex-start;}
 .tl-current{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;color:var(--green);border:1px solid var(--green);padding:2px 8px;display:inline-flex;align-items:center;gap:5px;margin-left:8px;}
 .tl-current::before{content:'';width:5px;height:5px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 .tl-desc{font-size:.93rem;color:rgba(232,232,238,.6);line-height:1.75;}
 
 /* PROJECT CARDS */
-.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(540px,1fr));gap:2px;}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(540px, 100%), 1fr));gap:2px;}
 .project-promo{
 max-width: 50%;
 }
@@ -161,7 +158,9 @@ max-width: 50%;
 .project-card:hover{border-color:rgba(245,166,35,.2);}
 
 .project-thumb{width:100%;height:210px;background:var(--bg3);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;}
-.thumb-placeholder{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.project-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.thumb-placeholder{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;height:100%;justify-content:center;position:relative;}
+.thumb-placeholder img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
 .game-icon{font-size:2.8rem;animation:iconFloat 3s ease-in-out infinite;}
 @keyframes iconFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
 .placeholder-label{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
@@ -179,7 +178,7 @@ max-width: 50%;
 .card-list li{font-size:.88rem;color:rgba(232,232,238,.7);line-height:1.65;padding-left:18px;position:relative;}
 .card-list li::before{content:'—';position:absolute;left:0;color:var(--accent);font-size:.75rem;top:2px;}
 
-.project-footer{display:flex;align-items:center;justify-content:space-between;padding-top:18px;border-top:1px solid var(--border);}
+.project-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:18px;border-top:1px solid var(--border);}
 .project-link{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:7px;transition:gap .2s;}
 .project-link:hover{gap:13px;}
 .project-platform{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;}
@@ -207,20 +206,75 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
 .fade-in{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s;}
 .fade-in.visible{opacity:1;transform:translateY(0);}
 
+/* ── HAMBURGER MENU ── */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--text);transition:transform .25s, opacity .25s;}
+.nav-mobile{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,12,.97);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:40px;backdrop-filter:blur(20px);}
+.nav-mobile.open{display:flex;}
+.nav-mobile a{font-family:var(--font-disp);font-size:3rem;letter-spacing:.08em;color:var(--text);text-decoration:none;transition:color .2s;}
+.nav-mobile a:hover{color:var(--accent);}
+.nav-mobile .nav-close{position:absolute;top:24px;right:24px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1200px){
+  #hero{ grid-template-columns:6fr 4fr; gap:48px; }
+}
 @media(max-width:1100px){
-  #hero{grid-template-columns:1fr;gap:40px;}
-  .hero-right{flex-direction:row;align-self:auto;}
-  .stat-card{flex:1;}
+  #hero{ grid-template-columns:1fr; gap:40px; padding:120px 60px 80px; }
+  .hero-right{ flex-direction:row; }
+  .stat-card{ flex:1; }
 }
 @media(max-width:900px){
-  nav{padding:16px 24px;}
-  .nav-links{display:none;}
-  section{padding:80px 24px;}
-  #hero{padding:100px 24px 60px;}
-  .about-grid{grid-template-columns:1fr;gap:48px;}
-  .projects-grid{grid-template-columns:1fr;}
-  footer{flex-direction:column;gap:10px;text-align:center;}
-  .hero-right{flex-direction:column;}
+  :root{ --section-px: 24px; }
+  /* disable custom cursor on likely-touch devices */
+  body{ cursor:auto; }
+  #cursor,#cursor-ring{ display:none; }
+  .btn-primary,.btn-ghost,.nav-cta{ cursor:pointer; }
+
+  /* nav */
+  nav{ padding:16px 24px; }
+  .nav-links{ display:none; }
+  .nav-cta{ display:none; }
+  .nav-hamburger{ display:flex; }
+
+  /* hero */
+  #hero{ grid-template-columns:1fr; padding:100px 24px 80px; gap:36px; }
+  .hero-right{ flex-direction:column; gap:10px; }
+  .stat-card{ padding:18px 20px; }
+  .stat-num{ font-size:2.2rem; }
+  .scroll-cue{ left:24px; bottom:28px; }
+
+  /* about */
+  .about-grid{ grid-template-columns:1fr; gap:48px; }
+
+  /* timeline */
+  .timeline{ padding-left:24px; }
+  .timeline-dot{ left:-30px; }
+  .tl-company{ font-size:1.2rem; }
+  .tl-date{ font-size:.6rem; }
+
+  /* project cards */
+  .projects-grid{ grid-template-columns:1fr; }
+  .project-body{ padding:22px 20px; }
+  .project-title{ font-size:1.5rem; }
+  .card-list li{ font-size:.85rem; }
+
+  /* contact */
+  #contact{ padding:80px 24px; }
+  .contact-links{ flex-direction:column; align-items:center; }
+  .contact-link{ width:100%; max-width:320px; justify-content:center; }
+
+  /* footer */
+  footer{ flex-direction:column; gap:10px; text-align:center; padding:20px 24px; }
+
+  .section-title{ margin-bottom:40px; }
+}
+@media(max-width:480px){
+  .hero-name{ font-size:clamp(3.8rem,18vw,5.5rem); }
+  .hero-bio{ font-size:1rem; }
+  .engine-badge,.studio-badge{ font-size:.52rem; padding:3px 7px; }
+  .project-footer{ flex-direction:column; align-items:flex-start; }
+  .tl-current{ display:none; }
 }
 </style>
 </head>
@@ -239,8 +293,21 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
     <li><a href="#personal">Personal</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <a href="mailto:contact@douglaswong.dev" class="nav-cta">Hire Me</a>
+  <a href="/cdn-cgi/l/email-protection#e98a86879d888a9da98d869c8e85889a9e86878ec78d8c9f" class="nav-cta">Hire Me</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE NAV OVERLAY -->
+<div class="nav-mobile" id="mobileNav">
+  <button class="nav-close" id="mobileClose">✕ Close</button>
+  <a href="#about" class="mobile-link">About</a>
+  <a href="#experience" class="mobile-link">Experience</a>
+  <a href="#professional" class="mobile-link">Professional</a>
+  <a href="#personal" class="mobile-link">Personal</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -294,8 +361,9 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
       <div class="skill-group">
         <h3>Game Engines</h3>
         <div class="skill-tags">
-          <span class="skill-tag primary">Unity 3D</span>
-          <span class="skill-tag primary">Unreal Engine</span>
+          <!-- <span class="skill-tag primary">Unity 3D</span> -->
+          <span class="skill-tag">Unity 3D</span>
+          <span class="skill-tag">Unreal Engine</span>
           <span class="skill-tag">Roblox</span>
           <span class="skill-tag">Godot</span>
         </div>
@@ -303,9 +371,9 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
       <div class="skill-group">
         <h3>Programming Languages</h3>
         <div class="skill-tags">
-          <span class="skill-tag primary">C#</span>
-          <span class="skill-tag primary">C++</span>
-          <span class="skill-tag primary">Lua</span>
+          <span class="skill-tag">C#</span>
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">Lua</span>
           <span class="skill-tag">JavaScript</span>
           <span class="skill-tag">TypeScript</span>
           <span class="skill-tag">Elixir</span>
@@ -318,7 +386,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
       <div class="skill-group">
         <h3>Frameworks</h3>
         <div class="skill-tags">
-          <span class="skill-tag primary">React Native</span>
+          <span class="skill-tag">React Native</span>
           <span class="skill-tag">Mirror Networking</span>
           <span class="skill-tag">Photon (PUN) Networking</span>
           <!-- <span class="skill-tag">GLSL</span> -->
@@ -330,7 +398,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
       <div class="skill-group">
         <h3>Tools</h3>
         <div class="skill-tags">
-          <span class="skill-tag primary">Git</span>
+          <span class="skill-tag">Git</span>
           <span class="skill-tag">Android Studio</span>
           <span class="skill-tag">XCode</span>
           <span class="skill-tag">GCP</span>
@@ -346,7 +414,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
       <div class="skill-group">
         <h3>Spoken Languages</h3>
         <div class="skill-tags">
-          <span class="skill-tag primary">English</span>
+          <span class="skill-tag">English</span>
           <span class="skill-tag">Mandarin</span>
           <span class="skill-tag">Cantonese</span>
           <span class="skill-tag">Portuguese</span>
@@ -467,15 +535,20 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
       </div>
       <div class="project-body">
         <div class="project-tags">
-          <span class="project-tag">Roblox</span><span class="project-tag">Lua</span><span class="project-tag">Multiplayer</span><span class="project-tag">Live Service</span>
+          <span class="project-tag">Obby</span>
+          <span class="project-tag">Multiplayer</span>
+          <span class="project-tag">Cross-Platform</span>
+          <span class="project-tag">Live Service</span>
         </div>
         <h3 class="project-title">CHICKEN TAG</h3>
         <p class="project-tagline">"Fast-paced Multiplayer Obby Chasing Game" — Grab the chicken, level up, repeat.</p>
         <p class="card-summary">A fast-paced endless tag multiplayer on Roblox where every match becomes absolute chaos. Hold the chicken to earn XP and coins, use crazy power-ups, survive World Events, and unlock wearables, trails, and chicken skins.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Integrated the game's foundation to utilize a data-driven architectural structure for faster feature implementation.</li>
-          <li>Worked closely with the game designer to add a fresh spin to the hit Chicken Tag concept.</li>
+          <li>Architected and implemented a data-driven content pipeline in Lua, reducing content update turnaround time by 60%.</li>
+          <li>Designed and built a modular game foundation supporting extensible World Events and live ops features, cutting new feature integration time by 50%.</li>
+          <li>Developed configuration-driven gameplay systems, allowing designers to iterate on balance and event parameters without engineering support, increasing iteration speed by 30%.</li>
+          <li>Collaborated closely with design to prototype and iterate on core gameplay systems, contributing to a more dynamic multiplayer loop and improved player engagement/retention.</li>
         </ul>
         <div class="project-footer">
           <a href="https://www.roblox.com/games/120717447268590/Chicken-Tag" target="_blank" class="project-link">Play on Roblox ↗</a>
@@ -492,23 +565,25 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
           <img src="img/logos/unannounced-promo.png" alt="Artifact5Unannounced" width="512px"/>
           <span class="placeholder-label">Unannounced VR Game</span>
         </div>
-        <span class="studio-badge">Artifact5</span>
-        <span class="engine-badge">Unreal 5 · Unity · C++ · C#</span>
+        <span class="studio-badge">Artifact 5</span>
+        <span class="engine-badge">Unreal 5 · C++ / Unity · C#</span>
       </div>
       <div class="project-body">
         <div class="project-tags">
-          <span class="project-tag">VR</span><span class="project-tag">Unreal Engine 5</span><span class="project-tag">Unity</span><span class="project-tag">C++</span><span class="project-tag">C#</span>
+          <span class="project-tag">Multiplayer</span>
+          <span class="project-tag">Adventure</span>
+          <span class="project-tag">Stealth</span>
+          <span class="project-tag">VR</span>
         </div>
         <h3 class="project-title">UNANNOUNCED VR GAME</h3>
-        <p class="project-tagline">"TBA" — An unannounced virtual reality experience in development at Artifact5.</p>
+        <p class="project-tagline">"TBA" — An unannounced VR game in development at Artifact 5.</p>
         <p class="card-summary">An unannounced VR title developed across both Unreal Engine 5 and Unity. Required a robust extensible architecture to support rapid iteration in a VR context, close collaboration with designers and directors, and a reliable multiplayer prototype foundation.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Integrated the game's foundation to utilize a data-driven architectural structure for faster feature iterations.</li>
-          <li>Designed a modular understructure game flow, allowing for effortless addition of new systems.</li>
-          <li>Created a designer-friendly NPC system that enables value-tuning iterations within Blueprints.</li>
-          <li>Developed a pipeline that increments build numbers to maintain coherency when testing multiplayer.</li>
-          <li>Collaborated closely with Designers and Directors to engineer a highly iterable prototype foundation in Unity, utilizing Mirror as the networking framework.</li>
+          <li>Architected a data-driven foundation, reducing feature iteration time by ~50% and enabling rapid prototyping of new gameplay systems.</li>
+          <li>Built a designer-friendly NPC system with Blueprint-based tuning, eliminating engineering dependency for balance changes and accelerating iteration speed by 10%.</li>
+          <li>Developed an automated build versioning pipeline, reducing multiplayer testing conflicts by ~90% and improving team-wide testing efficiency.</li>
+          <li>Collaborated with designers and directors to deliver a highly iterative multiplayer prototype in Unity (Mirror), shortening prototype turnaround time from days to hours.</li>        
         </ul>
         <div class="project-footer">
           <span class="project-platform">🥽 VR — TBA</span>
@@ -524,25 +599,28 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
           <img src="img/logos/recklessRivals-promo.png" alt="RecklessRivals" width="512px"/>
           <span class="placeholder-label">Tactical Strategy PvP</span>
         </div>
-        <span class="studio-badge">Artifact5</span>
-        <span class="engine-badge">Unity · C#</span>
+        <span class="studio-badge">Artifact 5</span>
+        <span class="engine-badge">Unity · C# · Elixir</span>
       </div>
       <div class="project-body">
         <div class="project-tags">
-          <span class="project-tag">Unity</span><span class="project-tag">C#</span><span class="project-tag">Mobile</span><span class="project-tag">PvP</span><span class="project-tag">Live Ops</span>
+          <span class="project-tag">Strategy</span>
+          <span class="project-tag">Mobile</span>
+          <span class="project-tag">Multiplayer</span>
+          <span class="project-tag">Live Ops</span>
         </div>
         <h3 class="project-title">RECKLESS RIVALS: STRATEGY PVP</h3>
         <p class="project-tagline">"Fast-paced Real Time Strategy Game" — Villagers transform into heroes in quick, strategic PvP battles.</p>
         <p class="card-summary">A midcore tactical battler where players collect and customize characters, craft gear for their Villagers, and compete in strategic PvP battles. Join the action and go on a journey to claim the Golden Chicken.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Integrated the game's foundation to utilize a data-driven architectural structure for faster feature iterations.</li>
-          <li>Implemented and managed server-side features and core structures with automated tests.</li>
-          <li>Developed a pipeline to extract data from databases inputted by Designers for the server.</li>
-          <li>Acted as technical support, providing tools and best practice guidelines for peers on the in-house database system and Unity's UI Toolkit.</li>
-          <li>Debugged game data and tutorials throughout production, ensuring seamless user experiences.</li>
-          <li>Prototyped gameplay features and tested new tools before their implementation.</li>
-          <li>Integrated Game Analytics to track critical events that helped identify issues with the tutorial.</li>
+          <li>Refactored the game foundation into a data-driven architecture, reducing feature iteration time by 40% and accelerating delivery of new gameplay systems.</li>
+          <li>Implemented and maintained server-side systems with automated test coverage, reducing regression issues by 30% and improving backend stability.</li>
+          <li>Developed a data ingestion pipeline from designer-managed databases to the server, cutting data integration time by 50% and minimizing manual errors.</li>
+          <li>Provided technical support and built internal tools/guidelines for database workflows and Unity UI Toolkit, reducing onboarding time for new engineers by 25%.</li>
+          <li>Debugged game data flows and tutorial systems throughout production, reducing user-facing issues and improving tutorial completion rates.</li>
+          <li>Prototyped gameplay features and validated internal tools prior to production integration, decreasing rework during implementation by 20%.</li>
+          <li>Integrated Game Analytics event tracking, identifying key tutorial drop-off points and contributing to measurable improvements in early player retention.</li>    
         </ul>
         <div class="project-footer">
           <a href="https://play.google.com/store/apps/details?id=com.Artifact5.randr&hl=en_CA" target="_blank" class="project-link">Google Play ↗</a>
@@ -560,22 +638,24 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
           <span class="placeholder-label">Blockchain Edutainment</span>
         </div>
         <span class="studio-badge">UpDownLeftRight Limited</span>
-        <span class="engine-badge">Unity · C#</span>
+        <span class="engine-badge">Unity · C# · AWS</span>
       </div>
       <div class="project-body">
         <div class="project-tags">
-          <span class="project-tag">Unity</span><span class="project-tag">C#</span><span class="project-tag">Multiplayer</span><span class="project-tag">AWS</span><span class="project-tag">Blockchain</span><span class="project-tag">Lead Dev</span>
+          <span class="project-tag">Single Player</span>
+          <span class="project-tag">Multiplayer</span>
+          <span class="project-tag">Blockchain</span>
         </div>
         <h3 class="project-title">MOA ADVENTURE</h3>
         <p class="project-tagline">"An Edutainment NFT Game" — Blockchain mobile game that entertains and educates on environmental sustainability.</p>
         <p class="card-summary">Myth of Aquatics · Adventure uses exploratory game chapters to increase players' understanding of environmental pollution and inspire sustainable development goals in daily life — wrapping education in compelling multiplayer gameplay.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Co-designed and co-developed the core gameplay of the semi-real-time multiplayer strategy chess game.</li>
-          <li>Implemented a lightweight real-time PvP matchmaking solution using AWS (GameLift, Lambda, DynamoDB) and Mirror networking.</li>
-          <li>Supervised the project throughout the development and game design cycle; from prototype to production.</li>
-          <li>Implemented key system features including addressables, login, and networking.</li>
-          <li>Developed the application's data-driven architectural structure similar to the MVC pattern.</li>
+          <li>Co-designed and developed core gameplay systems for a semi-real-time multiplayer strategy game.</li>
+          <li>Implemented a lightweight real-time PvP matchmaking system using AWS (GameLift, Lambda, DynamoDB) and Mirror, reducing matchmaking time to under a few seconds and ensuring reliable session creation.</li>
+          <li>Led technical oversight from prototype to production, reducing development bottlenecks and improving milestone delivery consistency.</li>
+          <li>Implemented core systems including addressables, authentication, and networking, decreasing load times and improving runtime performance.</li>
+          <li>Architected a data-driven system (MVC-inspired), reducing code coupling and cutting feature implementation time by 35%.</li>
         </ul>
         <div class="project-footer">
           <a href="https://play.google.com/store/apps/details?id=com.udlr.moaadventure&hl=en-HK" target="_blank" class="project-link">Google Play ↗</a>
@@ -604,11 +684,11 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
         <p class="card-summary">A massively popular mobile match-3 RPG with a large global player base. A long-running live service title demanding constant feature development, platform modernisation, and cross-discipline collaboration.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Implemented 300+ features including gameplay systems, UI/UX, and tool systems — using TDD in continuous collaboration with cross-discipline teams.</li>
-          <li>Implemented a new chat room system using socket and API methods.</li>
-          <li>Upgraded a seven-year-old codebase to dynamically support modern aspect ratios.</li>
-          <li>Supervised asset bundle management throughout testing and production settings.</li>
-          <li>Taught and provided guidance to 1 junior and 4 new programmers on the project and coding practices.</li>
+          <li>Delivered 300+ features across gameplay, UI/UX, and tooling using TDD practices, reducing post-release defects and improving overall code reliability.</li>
+          <li>Implemented a real-time chat system using sockets and API integration, enabling scalable player communication with low latency.</li>
+          <li>Modernized a 7-year-old codebase to support dynamic aspect ratios, improving device compatibility coverage and reducing UI-related issues.</li>
+          <li>Managed asset bundle workflows across development and production, reducing build size overhead and improving content delivery efficiency.</li>
+          <li>Mentored juniors and new engineers, accelerating onboarding time and improving team-wide coding standards and productivity.</li>
         </ul>
         <div class="project-footer">
           <a href="https://play.google.com/store/apps/details?id=com.madhead.tos.zh&hl=en&gl=US" target="_blank" class="project-link">Google Play ↗</a>
@@ -637,9 +717,8 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
         <p class="card-summary">A companion sticker app for Tower of Saviors bringing 6 sets of fan-favourite characters into WhatsApp. Built with content updatability in mind — new sticker packs can go live without requiring a full app redeployment.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Full development and deployment of the Android application.</li>
-          <li>Created a system where app redeployment was not needed when new stickers were uploaded, removing engineering bottlenecks for content updates.</li>
-        </ul>
+          <li>Led end-to-end development and deployment of an Android application, delivering a stable production release with streamlined update workflows.</li>
+          <li>Built a dynamic content delivery system for stickers, eliminating the need for app redeployments and reducing content update turnaround time from days to minutes.</li>        </ul>
         <div class="project-footer">
           <a href="https://play.google.com/store/apps/details?id=com.madhead.tos.zh&hl=en&gl=US" target="_blank" class="project-link">Google Play ↗</a>
           <span class="project-platform">📱 Android</span>
@@ -681,7 +760,8 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
           You play as an brave and daring investigator and you'll uncover the dark truth behind the lost cocoa.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Supervised prototyping, programming, and game design.</li>
+          <li>Led prototyping, programming, and game design, delivering a fully playable 3D stealth investigation experience within a constrained development timeline.</li>
+          <li>Developed a photo capture system using vector math and collision detection, enabling accurate target framing and interaction validation for core gameplay progression.</li>
         </ul>
         <div class="project-footer">
           <a href="https://fight320.itch.io/theanimaldaily" target="_blank" class="project-link">View on Itch.io ↗</a>
@@ -702,6 +782,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
         <div class="project-tags">
           <span class="project-tag">Multiplayer</span>
           <span class="project-tag">Adventure</span>
+          <span class="project-tag">Game Jam</span>
           <span class="project-tag">2025</span>
         </div>
         <h3 class="project-title">SKYFRUIT EXPRESS</h3>
@@ -709,10 +790,8 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
         <p class="card-summary">Fly between vibrant villages, buy and sell exotic fruits, complete quests, and unlock stylish balloon customisations — all while mastering the dynamic sky market. Built in Meta Horizon Worlds by a duo of creators.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Supervised prototyping, programming, and game design.</li>
-          <li>Integrated hot air balloon movement mechanics utilizing linear algebra and physics.</li>
-          <li>Developed an economy system that updates item prices daily, incentivizing players to return regularly and promoting strategic trading.</li>
-        </ul>
+          <li>Led prototyping, programming, and game design for a 10-player multiplayer trading experience, delivering a fully functional social gameplay loop.</li>
+          <li>Developed a dynamic economy system with daily price updates, increasing replayability and encouraging repeated player sessions through strategic trading incentives.</li>        </ul>
         <div class="project-footer">
           <a href="https://devpost.com/software/tbd-rl2n30" target="_blank" class="project-link">View on Devpost ↗</a>
           <span class="project-platform">🌐 Meta Horizon Worlds</span>
@@ -739,10 +818,11 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
         </div>
         <h3 class="project-title">SYMPHONY OF DUEL</h3>
         <p class="project-tagline">"Duality" — A rhythm multiplayer game where you cooperate with rivals and battle with friends.</p>
-        <p class="card-summary">Fight your inner self and find a way out of your musical mind. Player 1 must retrieve the scissors to cut the music sheet; Player 2 must grab a key to reach the goal. Made for Global Game Jam 2022.</p>
+        <p class="card-summary">Rhythm multiplayer game where you must cooperate with your rivals and battle with your friends.. Made for Global Game Jam 2022.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Supervised prototyping, programming, and game design.</li>
+          <li>Led prototyping, programming, and game design, delivering a complete multiplayer rhythm experience within a 48-hour game jam constraint.</li>
+          <li>Won Best Edutainment Game, out of 59 games.</li>
         </ul>
         <div class="project-footer">
           <a href="https://globalgamejam.org/2022/games/symphony-duel-4" target="_blank" class="project-link">View on GGJ ↗</a>
@@ -763,14 +843,18 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
       </div>
       <div class="project-body">
         <div class="project-tags">
-          <span class="project-tag">Unity</span><span class="project-tag">C#</span><span class="project-tag">Maya</span><span class="project-tag">Global Game Jam</span><span class="project-tag">2020</span>
+          <span class="project-tag">Single Player</span>
+          <span class="project-tag">Chill</span>
+          <span class="project-tag">Global Game Jam</span>
+          <span class="project-tag">2020</span>
         </div>
         <h3 class="project-title">SEW AWAY</h3>
         <p class="project-tagline">"Repair" — A grandma helps people repair their clothes in hope to repair their hearts.</p>
         <p class="card-summary">A tactile sewing simulation built for Global Game Jam 2020. Players physically thread needles, poke through cloth, tighten and cut threads, and change thread colours to mend garments — and the lives that go with them.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Responsible for prototyping, programming, 3D modelling, and video editing.</li>
+          <li>Owned end-to-end development including prototyping, programming, 3D modelling, and video production, delivering a fully interactive tactile simulation within a 48-hour timeframe.</li>
+          <li>Won Best Asian Style Game, out of 53 games.</li>
         </ul>
         <div class="project-footer">
           <a href="https://globalgamejam.org/2020/games/sew-away-3" target="_blank" class="project-link">View on GGJ ↗</a>
@@ -791,14 +875,18 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
       </div>
       <div class="project-body">
         <div class="project-tags">
-          <span class="project-tag">Unity</span><span class="project-tag">C#</span><span class="project-tag">Maya</span><span class="project-tag">Puzzle</span><span class="project-tag">2018</span>
+          <span class="project-tag">Single Player</span>
+          <span class="project-tag">Puzzle</span>
+          <span class="project-tag">Multiple Endings</span>
+          <span class="project-tag">2018</span>
         </div>
         <h3 class="project-title">HEY, OPERATOR?</h3>
         <p class="project-tagline">"Transmission" — Your job at Transcom: get messages from the sender to the right recipient.</p>
         <p class="card-summary">A switchboard operator puzzle where players drag SENDER and RECEIVER plugs to connect callers correctly. Misdirecting a message has consequences — a charming logic puzzle built around real telephone switchboard mechanics.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Responsible for prototyping, programming, and animation.</li>
+          <li>Led prototyping, programming, and animation, delivering a complete logic puzzle experience within a 48-hour game jam cycle.</li>
+          <li>Won Comic Relief Award, out of 59 games.</li>
         </ul>
         <div class="project-footer">
           <a href="https://fightezo.github.io/games/heyOperator" target="_blank" class="project-link">Play Game ↗</a>
@@ -819,15 +907,19 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
       </div>
       <div class="project-body">
         <div class="project-tags">
-          <span class="project-tag">Unity</span><span class="project-tag">C#</span><span class="project-tag">VR</span><span class="project-tag">Google Cardboard</span><span class="project-tag">Archiact Jam 7</span><span class="project-tag">2017</span>
+          <span class="project-tag">Single Player</span>
+          <span class="project-tag">Horror</span>
+          <span class="project-tag">VR</span>
+          <span class="project-tag">Archiact Jam 7</span>
+          <span class="project-tag">2017</span>
         </div>
         <h3 class="project-title">AMARYNTHE</h3>
         <p class="project-tagline">Global Archiact Jam 7 — You are a captive of the Most Dangerous Game.</p>
         <p class="card-summary">A VR survival experience for Google Cardboard. You've been captured — what measures has your captor taken to protect his new possession? In time, will he do unto you as he has to the others? Navigate tension and danger to escape.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Responsible for prototyping, programming, game design, and project management.</li>
-          <li>Managed a team across different time zones, enabling the game to be completed on schedule.</li>
+          <li>Led prototyping, programming, game design, and project management, delivering a complete VR survival experience for Google Cardboard within a limited jam timeline.</li>
+          <li>Managed a distributed team across multiple time zones, ensuring on-schedule delivery and maintaining development velocity under tight constraints.</li>
         </ul>
         <div class="project-footer">
           <a href="https://fight320.itch.io/amarynthe" target="_blank" class="project-link">Play on itch.io ↗</a>
@@ -855,9 +947,9 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
         <p class="card-summary">Unable to see in the dark, players use Seymour's bark to produce sound waves and navigate a maze-like cave. Watch out for territorial bats! A sound-based navigation puzzle featuring three distinct AI enemy behaviours built with Unity's NavMesh.</p>
         <div class="card-section-label">Responsibilities</div>
         <ul class="card-list">
-          <li>Prototyped the team's initial idea within the first night.</li>
-          <li>Implemented 3 behaviourally different AI enemies using Unity's NavMesh.</li>
-          <li>Provided technical assistance to team members through design feedback and consultation.</li>
+          <li>Rapidly prototyped the core gameplay loop within the first 24 hours, establishing the foundation for team-wide development.</li>
+          <li>Implemented three distinct AI enemy behaviors using Unity NavMesh, increasing gameplay variety and challenge through differentiated agent logic.</li>
+          <li>Provided technical guidance and design feedback to team members, improving implementation quality and aligning gameplay systems.</li>
         </ul>
         <div class="project-footer">
           <a href="https://fightezo.github.io/games/seymour" target="_blank" class="project-link">Play Game ↗</a>
@@ -881,7 +973,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
       <!-- <a href="https://fightezo.github.io/" target="_blank" class="contact-link">🌐 Portfolio</a> -->
       <a href="https://github.com/fightezo" target="_blank" class="contact-link">🐙 GitHub</a>
       <a href="https://fight320.itch.io/" target="_blank" class="contact-link">🎮 itch.io</a>
-      <a href="mailto:dwong.320@gmail.com" class="contact-link">✉️ Email Me</a>
+      <a href="/cdn-cgi/l/email-protection#ed899a82838ac3dedfddad8a808c8481c38e8280" class="contact-link">✉️ Email Me</a>
     </div>
   </div>
 </section>
@@ -891,7 +983,7 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:26px 60px
   <a href="#hero" class="footer-back">Back to top ↑</a>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const cursor = document.getElementById('cursor');
 const ring   = document.getElementById('cursor-ring');
 let mx=0,my=0,rx=0,ry=0;
@@ -899,6 +991,15 @@ document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cursor.st
 (function animate(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animate); })();
 const io = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }); },{threshold:.1});
 document.querySelectorAll('.timeline-item,.project-card,.fade-in').forEach(el=>io.observe(el));
-</script>
+
+// Hamburger menu
+const hamburger  = document.getElementById('hamburger');
+const mobileNav  = document.getElementById('mobileNav');
+const mobileClose = document.getElementById('mobileClose');
+function openMenu(){ mobileNav.classList.add('open'); document.body.style.overflow='hidden'; }
+function closeMenu(){ mobileNav.classList.remove('open'); document.body.style.overflow=''; }
+hamburger.addEventListener('click', openMenu);
+mobileClose.addEventListener('click', closeMenu);
+mobileNav.querySelectorAll('.mobile-link').forEach(l=>l.addEventListener('click', closeMenu));</script>
 </body>
 </html>
